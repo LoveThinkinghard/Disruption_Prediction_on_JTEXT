@@ -33,3 +33,15 @@ def simplify(ips, time=time):
 def get_shot(shot_no, shots_t=shots):
     # find ip with shot_no（使用炮号找到对应的ip值，返回引索值）
     return shots.index(shot_no)
+
+
+def find_the_point(ips_smp, time_smp, shot_no=1047741):
+    # 如果有大突降，则返回这个点，否则返回空数组，注意shot_no需要是一个能在数据库中找到的炮号
+    index = get_shot(shot_no)
+    sample = np.arange(0, 1000, 20)
+    ip_k = [ips_smp[index][sample][i+1]-ips_smp[index][sample][i] for i in range(len(ips_smp[index][sample])-1)]
+    drop_point = np.where(np.array(ip_k)<-40)[0][0] if np.where(np.array(ip_k)<-40)[0].size else False
+    if drop_point:
+        while(ip_k[drop_point-1]<-2):
+            drop_point -= 1
+    return time_smp[sample][drop_point], ips_smp[index][sample][drop_point]

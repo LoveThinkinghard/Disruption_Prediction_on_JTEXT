@@ -30,3 +30,19 @@ plt.ylabel('ip (kA)')
 plt.grid()
 plt.savefig('shot ip simplified No.{}.png'.format(1047645))
 plt.show()
+
+
+# 四.寻找突降点，精度低（约0.01s）
+# 1.指定炮号
+shot_no = 1047741
+# 2.找到突降点
+t, ip = dip.find_the_point(ips_smp, time_smp, shot_no)
+# 3.画图显示
+plt.title('shot No.{}'.format(shot_no))
+plt.grid()
+plt.xlabel('t (s)')
+plt.ylabel('ip (kA)')
+plt.plot(time_smp, ips_smp[dip.get_shot(shot_no)], t, ip, 'x')
+if t.size>0:
+    plt.annotate('Bang! at about {:.2f}s'.format(t), xy=(t+0.05, ip))
+plt.show()
