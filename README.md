@@ -7,6 +7,7 @@
 与ip数据库对应的ip图像库，有助于增加对数据的直观理解
 ### ip数据读取及处理函数包（data_ip_process.py）
 1.数据读取：read_ip_csv()  
-2.数据简化（采样，滤波）：simplify()  
+2.数据简化（采样，滤波，效果在ip数据图像库中有一定展示）：simplify()  
 3.根据炮号寻找数据：get_shot()  
+4.找到突降点（精度大致为0.01s，效果展示在文件夹find_the_point(0.01s)中）：find_the_point()  
 具体使用方法，请参考demo
