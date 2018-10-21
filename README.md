@@ -1,13 +1,50 @@
 # Disruption_Prediction_on_JTEXT
-## ip数据模块（shot_ip_data）
-### ip数据库（shot_data_ip.csv）
-结构：一行为一炮数据，每行第一个数为炮号，后面为对应的从-0.1s到0.9s的ip值（保留到整数位）  
-规模：共261行，即261炮（从1047630炮到1047903炮，有些炮号没有数据）  
-### ip数据图像库（shot_ip_img）
-与ip数据库对应的ip图像库，有助于增加对数据的直观理解
-### ip数据读取及处理函数包（data_ip_process.py）
-1.数据读取：read_ip_csv()  
-2.数据简化（采样，滤波，效果在ip数据图像库中有一定展示）：simplify()  
-3.根据炮号寻找数据：get_shot()  
-4.找到突降点（精度大致为0.01s，效果展示在文件夹find_the_point(0.01s)中）：find_the_point()  
-具体使用方法，请参考demo
+## 数据处理函数包（dataprocess）
+### 结构
+>dataprocess(package)
+>>main(module)  
+>>ip(module)  
+
+### 使用
+0.把整个dataprocess文件夹放到当前程序运行的目录
+
+1.导入
+
+```python
+import dataprocess.main as dpm
+import dataprocess.ip as dpi
+```
+
+2.主要函数使用示例
+
+* 从服务器读数据：
+```python
+shots, ips, time = dpm.readFromServer(1047639, 1047649, '\ip')
+```
+* 保存数据到csv
+```python
+dpm.write_csv(shots, ips, time, signal_name='ip', file_path='signal_ip.csv')
+```
+* 从csv文件读数据
+```python
+shots_t, ips_t, time_t = dpm.read_csv(file_path='signal_ip.csv')
+```
+* 根据炮号获取信号值
+```python
+ip = dpm.get_shot(shots, signals=ips, shot_no=1047642)
+```
+* 判断是否有并寻找破裂点，有：返回时间，无：返回False
+```python
+disruptime = dpi.find_the_point_2(ip, time)
+```
+* 画图检查判断效果
+```python
+dpi.check_point(ip, time, break_time=disruptime, shot_no=1047642)
+```
+一般情况的效果：
+
+![画图检查的效果](https://github.com/LoveThinkinghard/Disruption_Prediction_on_JTEXT/blob/master/check_point_demo.png)
+
+若`break_time`为`False`，则：
+
+![画图检查的效果2](https://github.com/LoveThinkinghard/Disruption_Prediction_on_JTEXT/blob/master/check_point_demo_2.png)
